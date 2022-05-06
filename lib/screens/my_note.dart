@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todoapp_getx/screens/model/todo_model.dart';
 import 'package:get/get.dart';
-import '../model.dart';
-import 'controller.dart';
+
+import 'controller/todo_controller.dart';
 
 class MyNote extends StatelessWidget {
   int index;
   MyNote({this.index});
   @override
   Widget build(BuildContext context) {
-    final NoteController nc = Get.find();
-    String text="";
-    text=index==null?" ":nc.notes[index].title;
-    TextEditingController textEditingController = new TextEditingController(text: text);
+    final TodoController nc = Get.find();
+    String text = "";
+    text = index == null ? " " : nc.notes[index].title;
+    TextEditingController textEditingController =
+        new TextEditingController(text: text);
 
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              title: index==null?Text('Create a New Note '):Text('Update note'),
+              backgroundColor: Colors.deepPurple.shade400,
+              title: index == null
+                  ? Text('Create a New Note ')
+                  : Text('Update note'),
             ),
             body: Padding(
               padding: EdgeInsets.all(15),
@@ -27,16 +32,17 @@ class MyNote extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
-                      child: TextField(
+                      child: TextFormField(
                         controller: textEditingController,
                         autofocus: true,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
-                            hintText: 'Create a new note!!',
-                            labelText: ' My Note',
-                            border: OutlineInputBorder(
+                          fillColor: Colors.indigo.shade300,
+                          hintText: 'Create a new note!!',
+                          labelText: ' My Note',
+                          border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black87),
-                                borderRadius: BorderRadius.circular(10)),
+                              borderRadius: BorderRadius.circular(10)),
                         ),
                         style: TextStyle(fontSize: 20),
                         keyboardType: TextInputType.text,
@@ -44,31 +50,43 @@ class MyNote extends StatelessWidget {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        RaisedButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Text('Cancel'),
-                          color: Colors.red,
-                        ),
-                        RaisedButton(
-                            onPressed: () {
-                              if (index==null){
-                              nc.notes.add(Note(title: textEditingController.text));
-                              }
-                              else{
-                             var updatenote=nc.notes[index];
-                             updatenote.title=textEditingController.text;
-                             nc.notes[index]=updatenote;
-                              }
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 50,
+                            width: 100,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text('Cancel'),
+                              style:
+                                  ElevatedButton.styleFrom(primary: Colors.red),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: 100,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (index == null) {
+                                  nc.notes.add(TodoModel(
+                                      title: textEditingController.text));
+                                } else {
+                                  var updatenote = nc.notes[index];
+                                  updatenote.title = textEditingController.text;
+                                  nc.notes[index] = updatenote;
+                                }
 
-                              Get.back();
-                            },
-                          child: index==null?Text('Add'):Text('Update'),
-                          color: Colors.green,)
-                    ])
+                                Get.back();
+                              },
+                              child:
+                                  index == null ? Text('Add') : Text('Update'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.green),
+                            ),
+                          )
+                        ])
                   ],
                 ),
               ),
